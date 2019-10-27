@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+
+    <script type="module"
+        src="https://unpkg.com/@square33/cookie-opt-in/dist/cookie-opt-in/cookie-opt-in.esm.js"></script>
+    <script nomodule="" src="https://unpkg.com/@square33/cookie-opt-in/dist/cookie-opt-in/cookie-opt-in.js"></script>
+
+    <script class="checkbox-statistics-script-link" type="text/plain"
+        src="https://www.googletagmanager.com/gtag/js?id=UA-109990725-X"></script>
+
+</head>
+
+<body>
+    <script class="checkbox-statistics" type="text/plain">
+            console.log('Statistics Script'); 
+            var disableStr = 'ga-disable-UA-109990725-X';
+            if ((document.cookie.indexOf(disableStr + '=true') > -1)
+              || (decodeURI(window.location.search).indexOf("internal")) > -1) {
+              window[disableStr] = true;
+            };
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+            gtag('config', 'UA-109990725-X', { 'anonymize_ip': true });
+          </script>
+
+    <script class="checkbox-necessary" type="text/plain">
+            console.log('Necessary Script'); 
+          </script>
+
+
+    <button onclick="document.querySelector('cookie-opt-in').toggleCookeieOptInModal();">Show Cookie Consent</button>
+
+    <cookie-opt-in>
+    </cookie-opt-in>
+    <script>
+        var cookieCompleteSettings = {
+            "heading": "Cookie Consent",
+            "notice": "We use cookies so that we can offer you the best possible website experience. This includes cookies which are necessary for the operation of the website, as well as other cookies which are used solely for anonymous statistical purposes, for our support chat or for marketing purposes. You are free to decide which categories you would like to permit. Please note that depending on the settings you choose, the full functionality of the website may no longer be available. Further information can be found in our <a href=\"/data-protection\">Privacy Policy</a>.",
+            "buttonAll": "Select All",
+            "buttonConfirm": "Confirm Selection",
+            "imprintLink": "#",
+            "hideDetails": "Hide Details",
+            "showDetails": "Show Details",
+            "details": [
+                {
+                    "heading": "Necessary",
+                    "text": "These cookies are necessary to run the core functionalities of this website, e.g. security related functions or your cookie-consent preferences."
+                },
+                {
+                    "heading": "Statistics",
+                    "text": "In order to improve our website and provide the best possible service in the future, we anonymously track data for statistical and analytical purposes. With these cookies we can, for example, track the number of visits or the impact of specific pages of our web presence and therefore optimize our content."
+                },
+                {
+                    "heading": "Chat Support",
+                    "text": "On order to be able to offer a chat box for you where you can reach our support directly, we need to set cookies."
+                },
+                {
+                    "heading": "Marketing",
+                    "text": "These cookies are used to display personalized content matching your interests."
+                }
+            ],
+            "checkboxes": [
+                {
+                    "necessary": true,
+                    "id": "checkbox-necessary",
+                    "label": "Necessary",
+                    "cookies": []
+                },
+                {
+                    "necessary": false,
+                    "id": "checkbox-statistics",
+                    "label": "Statistics",
+                    "cookies": [
+                        "_g"
+                    ]
+                },
+                {
+                    "necessary": false,
+                    "id": "checkbox-chat",
+                    "label": "Chat Support",
+                    "cookies": []
+                },
+                {
+                    "necessary": false,
+                    "id": "checkbox-marketing",
+                    "label": "Marketing",
+                    "cookies": []
+                }
+            ]
+        };
+
+        var overwriteConfig = {
+            "heading": "Cookie Consent Example"
+        };
+
+        var cmp = document.querySelector('cookie-opt-in');
+        cmp.config = overwriteConfig;
+
+    </script>
+
+
+
+</body>
+
+<style>
+    body {
+        background-color: black;
+    }
+</style>
+
+</html>
