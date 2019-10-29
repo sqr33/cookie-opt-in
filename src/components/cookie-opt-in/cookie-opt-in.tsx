@@ -1,5 +1,5 @@
 import { Component, h, State, Method, Prop, Watch } from '@stencil/core';
-import { CookieOptInSettings } from './settings'
+import { CookieNoticeSetting, EnglishCookieSettings, GermanCookieSettings } from './settings'
 import Cookie from 'js-cookie';
 
 @Component({
@@ -7,10 +7,20 @@ import Cookie from 'js-cookie';
   styleUrl: 'cookie-opt-in.scss'
 })
 export class CookieOptIn {
+  private defaultLanguage = 'EN';
 
-  @Prop() config;
+  // Not defining a type b/c in HTML you can only pass
+  // in strings if you add it as an argument in the tag. 
+  // It should be an Array of CookieNoticeSettings.
+  @Prop() configs;
+  private configMap: Object /* as Map<String,CookieNoticeSettings> */ = {
+    'EN': new EnglishCookieSettings(),
+    'DE': new GermanCookieSettings()
+  }
 
-  @State() private settings: CookieOptInSettings = new CookieOptInSettings();
+  @Prop() language = this.defaultLanguage;
+
+  @State() private settings: CookieNoticeSetting = this.configMap[this.language];
 
 
   private checkboxStatus: Object = {};
@@ -22,6 +32,28 @@ export class CookieOptIn {
 
   @Method() async toggleCookeieOptInModal() {
     this.modalVisible = !this.modalVisible;
+  }
+
+  @Watch('config')
+  mergeConfig() {
+    if (this.configs) { //because of https://medium.com/@gilfink/using-complex-objects-arrays-as-props-in-stencil-components-f2d54b093e85
+      if (typeof this.configs === 'string') {
+        this.configs = JSON.parse(this.configs);
+      }
+      for (var config of this.configs) {
+        const langauge = config.language ? config.language : this.defaultLanguage;
+        const existingConfig = this.configMap[langauge];
+        const newConfig = existingConfig ? { ...existingConfig, ...config } : config;
+        this.configMap[langauge] = newConfig;
+        this.settings = newConfig;
+      }
+
+    }
+  }
+
+  @Watch('language')
+  switchLanguage() {
+    this.settings = this.configMap[this.language];
   }
 
   deleteCookiesWithPrefix(prefix: string) {
@@ -39,26 +71,33 @@ export class CookieOptIn {
     this.detailsVisible = !this.detailsVisible;
   }
 
-  runLinkedScripts(scriptClass: string) {
+  runScripts(scriptClass: string) {
     const elements = document.getElementsByClassName(scriptClass);
+    // Elements is an object, not an array
     Array.prototype.forEach.call(elements, (elem) => {
       const source = elem.src;
-      const script = document.createElement('script');
-      script.type = 'text/javascript';
-      script.src = source;
-      document.body.appendChild(script);
-    })
+      if (source) {
+        this.runLinkedScript(source);
+      } else {
+        const scriptToExecute = elem.innerText;
+        this.runEmbeddedScript(scriptToExecute);
+      }
+    });
+
   }
 
-  runEmbeddedScripts(scriptClass: string) {
-    const elements = document.getElementsByClassName(scriptClass);
-    Array.prototype.forEach.call(elements, (elem) => {
-      const scriptToExecute = elem.innerText;
-      const script = document.createElement('script');
-      const scriptText = document.createTextNode(scriptToExecute);
-      script.appendChild(scriptText);
-      document.body.appendChild(script);
-    })
+  runLinkedScript(scriptURL: string) {
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = scriptURL;
+    document.body.appendChild(script);
+  }
+
+  runEmbeddedScript(scriptToExecute: string) {
+    const script = document.createElement('script');
+    const scriptText = document.createTextNode(scriptToExecute);
+    script.appendChild(scriptText);
+    document.body.appendChild(script);
   }
 
   checkIfTicked(checkboxId: string): boolean {
@@ -95,8 +134,7 @@ export class CookieOptIn {
     for (let checkboxId in this.checkboxStatus) {
       const previousState = this.checkboxStatus[checkboxId];
       if (previousState === false && this.checkIfTicked(checkboxId)) {
-        this.runLinkedScripts(`${checkboxId}-script-link`);
-        this.runEmbeddedScripts(checkboxId);
+        this.runScripts(checkboxId);
         this.checkboxStatus[checkboxId] = true;
       }
 
@@ -120,18 +158,12 @@ export class CookieOptIn {
     this.modalVisible = false;
   }
 
-  @Watch('config')
-  mergeConfig() {
-    if (this.config) { //because of https://medium.com/@gilfink/using-complex-objects-arrays-as-props-in-stencil-components-f2d54b093e85
-      if (typeof this.config === 'string') {
-        this.config = JSON.parse(this.config);
-      }
-      this.settings = { ...this.settings, ...this.config };
-    }
-  }
+
 
   componentWillLoad() {
+    // console.log(JSON.stringify(new EnglishCookieSettings()));
     this.mergeConfig();
+    this.switchLanguage();
     const wasConsented: string = Cookie.get('cookieOptInConsent');
     if (wasConsented && wasConsented === 'true') {
       this.wasConsented = true;
@@ -141,21 +173,21 @@ export class CookieOptIn {
   }
 
   componentDidLoad() {
-    //console.log(JSON.stringify(this.settings));
-    this.settings.checkboxes.map((checkbox) => {
+    this.mergeConfig();
+    this.switchLanguage();
+    this.settings.categories.map((category) => {
       if (this.wasConsented) {
-        const isAllowed = Cookie.get(`cookieOptInConsent-${checkbox.id}`);
+        const isAllowed = Cookie.get(`cookieOptInConsent-${category.id}`);
         if (isAllowed && isAllowed === 'true') {
-          this.setToTicked(checkbox.id);
+          this.setToTicked(category.id);
         }
       }
-      this.checkboxStatus[checkbox.id] = false;
-      this.cookiesToDelete[checkbox.id] = checkbox.cookies;
+      this.checkboxStatus[category.id] = false;
+      this.cookiesToDelete[category.id] = category.cookies;
     }
     )
     if (this.wasConsented) {
       this.checkWhatToExecute();
-
     }
   }
 
@@ -171,14 +203,14 @@ export class CookieOptIn {
             </p>
           </div>
           <div class="checkboxes">
-            {this.settings.checkboxes.map((checkbox) =>
-              <div style={checkbox.necessary ? { 'pointer-events': 'none' } : {}}>
+            {this.settings.categories.map((category) =>
+              <div style={category.necessary ? { 'pointer-events': 'none' } : {}}>
                 <label class="checkbox-label" >
-                  <input id={checkbox.id} class="checkbox" type="checkbox"
-                    checked={checkbox.necessary}
-                    disabled={checkbox.necessary}
+                  <input id={category.id} class="checkbox" type="checkbox"
+                    checked={category.necessary}
+                    disabled={category.necessary}
                   />
-                  {checkbox.label}</label>
+                  {category.label}</label>
               </div>
 
             )}
@@ -191,10 +223,10 @@ export class CookieOptIn {
 
           <div id="details-text" class={`details-text ${this.detailsVisible ? '' : 'hidden'}`}>
             <ul>
-              {this.settings.details.map((detail) =>
+              {this.settings.categories.map((category) =>
                 <li>
-                  <h4>{detail.heading}</h4>
-                  <p>{detail.text}</p>
+                  <h4>{category.label}</h4>
+                  <p>{category.description}</p>
                 </li>
               )}
             </ul>
@@ -203,10 +235,10 @@ export class CookieOptIn {
             </div>
           </div>
           <div class="imprint">
-            <a href={this.settings.imprintLink}>Imprint</a>
+            <a target="_blank" href={this.settings.imprintLink}>Imprint</a>
           </div>
           <div class="buttons">
-            <button class="btn-all" onClick={() => this.checkWhatToExecute(true)}>{this.settings.buttonAll}</button>
+            <button class="btn-all" style={this.settings.styles.confirmAllButton} onClick={() => this.checkWhatToExecute(true)}>{this.settings.buttonAll}</button>
             <button class="btn-confirm" onClick={() => this.checkWhatToExecute(false)}>{this.settings.buttonConfirm}</button>
           </div>
 

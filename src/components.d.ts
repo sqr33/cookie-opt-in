@@ -11,7 +11,8 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 export namespace Components {
   interface CookieOptIn {
-    'config': any;
+    'configs': any;
+    'language': string;
     'toggleCookeieOptInModal': () => Promise<void>;
   }
 }
@@ -31,7 +32,8 @@ declare global {
 
 declare namespace LocalJSX {
   interface CookieOptIn {
-    'config'?: any;
+    'configs'?: any;
+    'language'?: string;
   }
 
   interface IntrinsicElements {

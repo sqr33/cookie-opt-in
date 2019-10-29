@@ -1,5 +1,18 @@
+export interface CookieNoticeSetting {
+    language: string;
+    heading: string;
+    notice: string;
+    buttonAll: string;
+    buttonConfirm: string;
+    imprintLink: string;
+    hideDetails: string;
+    showDetails: string;
+    categories: Array<Category>;
+    styles: StyleConfig;
+}
 
-export class CookieOptInSettings {
+export class EnglishCookieSettings implements CookieNoticeSetting {
+    language: "EN";
     heading: string = 'Cookie Consent';
 
     notice: string = `We use cookies so that we can offer you the best possible website experience. This includes cookies which are necessary for the operation of the website, as well as other cookies which are used solely for anonymous statistical purposes, for our support chat or for marketing purposes. You are free to decide which categories you would like to permit. Please note that depending on the settings you choose, the full functionality of the website may no longer be available. Further information can be found in our <a href="/data-protection">Privacy Policy</a>.`
@@ -12,50 +25,92 @@ export class CookieOptInSettings {
     hideDetails: string = 'Hide Details'
     showDetails: string = 'Show Details'
 
-    details: Array<Details> = [
-        new Details(
+    categories: Array<Category> = [
+        new Category(
+            'category-necessary',
             'Necessary',
-            `These cookies are necessary to run the core functionalities of this website, e.g. security related functions or your cookie-consent preferences.`
-        ),
-        new Details(
+            'These cookies are technically required for our core website to work properly, e.g. security functions or your cookie consent preferences.',
+            [],
+            true),
+        new Category(
+            'category-statistics',
             'Statistics',
-            `In order to improve our website and provide the best possible service in the future, we anonymously track data for statistical and analytical purposes. With these cookies we can, for example, track the number of visits or the impact of specific pages of our web presence and therefore optimize our content.`
-        ),
-        new Details(
+            'In order to improve our website going forward, we anonymously collect data for statistical and analytical purposes. With these cookies we can, for instance, monitor the number or duration of visits of specific pages of our website helping us in optimising user experience.',
+            ['_g']),
+        new Category(
+            'category-chat',
             'Chat Support',
-            `On order to be able to offer a chat box for you where you can reach our support directly, we need to set cookies.`
-        ),
-        new Details(
+            'We want to make it as easy as possible for you to reach our support teams, e.g. via our chat box, which requires certain cookies.'),
+        new Category(
+            'category-marketing',
             'Marketing',
-            `These cookies are used to display personalized content matching your interests.`
-        ),
-    ]
-    checkboxes: Array<Checkbox> = [
-        new Checkbox('checkbox-necessary', 'Necessary', [], true),
-        new Checkbox('checkbox-statistics', 'Statistics', ['_g']),
-        new Checkbox('checkbox-chat', 'Chat Support'),
-        new Checkbox('checkbox-marketing', 'Marketing'),
-    ]
+            'These cookies help us in measuring and optimising our marketing efforts.'),
+    ];
+    styles = new StyleConfig({});
 }
 
-export class Details {
-    heading: string;
-    text: string;
-    constructor(heading: string, text: string) {
-        this.heading = heading;
-        this.text = text.replace(/\s+/g, " ");
+export class GermanCookieSettings implements CookieNoticeSetting {
+    language: "DE";
+    heading: string = 'Cookie-Einstellungen';
+
+    notice: string = `Wir verwenden Cookies, um Ihnen die bestmögliche Webseite anzubieten. Das bedeutet, dass wir Cookies nutzen, um die Seite funktionsfähig zu machen, als auch Cookies, die für eine anonyme statistische Erfassung, unseren Chat-Support und für Marketingzwecke notwendig sind. Ihnen steht es frei, zu entscheiden, welche Kategorien Sie zulassen möchten. Bitte seien Sie Sich bewusst, dass abhängig von Ihrer Auswahl eventuell nicth die volle Webseitenfunktionalität zur Verfügung steht. Weitere Informationen finden Sie in unserer <a target="_blank" href="/datenschutz">Datenschutzerlärung</a>.`
+
+    buttonAll: string = 'Alle auswählen'
+    buttonConfirm: string = 'Auswahl bestätigen'
+
+    imprintLink: string = '#'
+
+    hideDetails: string = 'Details ausblenden'
+    showDetails: string = 'Details anzeigen'
+
+    categories: Array<Category> = [
+        new Category(
+            'category-necessary',
+            'Notwendig',
+            'Diese Cookies sind unbedingt für die Funktionalität der Seite notwendig z.B. Anmeldeinformationen, Sicherheit oder Ihre Cookie-Einstellugen',
+            [],
+            true),
+        new Category(
+            'category-statistics',
+            'Anonyme Statistiken',
+            'Um unsere Webseite besser verstehen zu können und sie in Zukunft für Sie zu verbessern, erheben wir In order to improve our website going forward, we anonymously collect data for statistical and analytical purposes. With these cookies we can, for instance, monitor the number or duration of visits of specific pages of our website helping us in optimising user experience.',
+            ['_g']),
+        new Category(
+            'category-chat',
+            'Chat Unterstützung',
+            'Wir möchten es Ihnen So einfach wie möglich mit uns Kontakt aufzunehmen und Unterstützung zu bekommen. Zum Beispiel über unsere Chatbox, die Cookies voraussetzt.'),
+        new Category(
+            'category-marketing',
+            'Marketing',
+            'Diese Cookies helfen uns dabei, unser Marketing zu messen und zu verbessern.'),
+    ];
+    styles = new StyleConfig({});
+
+}
+
+export class Category {
+    id: string;
+    label: string;
+    description: string;
+    cookies: Array<string>;
+    necessary: boolean = false;
+    constructor(id: string,
+        label: string,
+        description: string,
+        cookies: Array<string> = [],
+        necessary: boolean = false
+    ) {
+        this.id = id;
+        this.label = label;
+        this.description = description.replace(/\s+/g, " ");
+        this.cookies = cookies;
+        this.necessary = necessary;
     }
 }
 
-export class Checkbox {
-    id: string;
-    label: string;
-    cookies: Array<string>;
-    necessary: boolean = false;
-    constructor(id: string, label: string, cookies: Array<string> = [], necessary: boolean = false) {
-        this.id = id;
-        this.label = label;
-        this.cookies = cookies;
-        this.necessary = necessary;
+export class StyleConfig {
+    confirmAllButton: any;
+    constructor(confirmAllButton: any) {
+        this.confirmAllButton = confirmAllButton;
     }
 }
