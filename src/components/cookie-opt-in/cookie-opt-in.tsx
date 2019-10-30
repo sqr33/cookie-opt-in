@@ -8,6 +8,7 @@ import Cookie from 'js-cookie';
 })
 export class CookieOptIn {
   private defaultLanguage = 'EN';
+  private stylePrefix = 'sqr33-coi-';
 
   // Not defining a type b/c in HTML you can only pass
   // in strings if you add it as an argument in the tag. 
@@ -193,20 +194,20 @@ export class CookieOptIn {
 
   render() {
     return (
-      [<div id="cookie-modal" class={`cookie-modal ${this.modalVisible ? '' : 'hidden'}`}>
-        <div class="modal-content">
-          <div class="heading">
+      [<div id={`${this.stylePrefix}cookie-modal`} class={`${this.stylePrefix}cookie-modal ${this.modalVisible ? '' : 'hidden'}`}>
+        <div class={`${this.stylePrefix}modal-content`}>
+          <div class={`${this.stylePrefix}heading`}>
             {this.settings.heading}
           </div>
-          <div class="notice">
+          <div class={`${this.stylePrefix}notice`}>
             <p innerHTML={this.settings.notice.replace(/\s+/g, " ")}>
             </p>
           </div>
-          <div class="checkboxes">
+          <div class={`${this.stylePrefix}checkboxes`}>
             {this.settings.categories.map((category) =>
               <div style={category.necessary ? { 'pointer-events': 'none' } : {}}>
-                <label class="checkbox-label" >
-                  <input id={category.id} class="checkbox" type="checkbox"
+                <label class={`${this.stylePrefix}checkbox-label`}>
+                  <input id={category.id} class={`${this.stylePrefix}checkbox`} type="checkbox"
                     checked={category.necessary}
                     disabled={category.necessary}
                   />
@@ -215,13 +216,13 @@ export class CookieOptIn {
 
             )}
           </div>
-          <div class="details-toggle" >
+          <div class={`${this.stylePrefix}details-toggle`} >
             <div id="details-toogle-button" onClick={() => this.toggleDetailsVisibility()}>
               {this.detailsVisible ? this.settings.hideDetails : this.settings.showDetails}
             </div>
           </div>
 
-          <div id="details-text" class={`details-text ${this.detailsVisible ? '' : 'hidden'}`}>
+          <div id="details-text" class={`${this.stylePrefix}details-text ${this.detailsVisible ? '' : 'hidden'}`}>
             <ul>
               {this.settings.categories.map((category) =>
                 <li>
@@ -230,16 +231,16 @@ export class CookieOptIn {
                 </li>
               )}
             </ul>
-            <div class="details-toggle" onClick={() => this.toggleDetailsVisibility()}>
+            <div class={`${this.stylePrefix}details-toggle"`} onClick={() => this.toggleDetailsVisibility()}>
               <div> {this.settings.hideDetails}</div>
             </div>
           </div>
-          <div class="imprint">
-            <a target="_blank" href={this.settings.imprintLink}>Imprint</a>
+          <div class={`${this.stylePrefix}imprint`}>
+            <a target="_blank" href={this.settings.imprintLink}>{this.settings.imprintText}</a>
           </div>
-          <div class="buttons">
-            <button class="btn-all" style={this.settings.styles.confirmAllButton} onClick={() => this.checkWhatToExecute(true)}>{this.settings.buttonAll}</button>
-            <button class="btn-confirm" onClick={() => this.checkWhatToExecute(false)}>{this.settings.buttonConfirm}</button>
+          <div class={`${this.stylePrefix}buttons`}>
+            <button class={`${this.stylePrefix}btn-all`} style={this.settings.styles.confirmAllButton} onClick={() => this.checkWhatToExecute(true)}>{this.settings.buttonAll}</button>
+            <button class={`${this.stylePrefix}btn-confirm`} onClick={() => this.checkWhatToExecute(false)}>{this.settings.buttonConfirm}</button>
           </div>
 
         </div>

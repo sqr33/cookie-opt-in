@@ -13,8 +13,9 @@ This tool creates a configurable dialogue box for this purpose.
 
 
 ## Demo
-Check the [`example.html`](https://github.com/sqr33/cookie-opt-in/blob/master/example.html) in the root directory of the GitHub repo under [github.com/sqr33/cookie-opt-in](https://github.com/sqr33/cookie-opt-in/).
-Just download it and run it in your browser.
+We initially developed the project for our own [website](https://pricegenius.eu), so you can see the dialog there live in action.
+Also check the [`example.html`](https://github.com/sqr33/cookie-opt-in/blob/master/example.html) in the root directory of the GitHub repo under [github.com/sqr33/cookie-opt-in](https://github.com/sqr33/cookie-opt-in/).
+Just download it and run it on a server (e.g. with [Python's simple http server](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/set_up_a_local_testing_server)) because browswers don't really let you set cookies for local files.
 
 
 ## Setup

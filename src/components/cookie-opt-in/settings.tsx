@@ -4,6 +4,7 @@ export interface CookieNoticeSetting {
     notice: string;
     buttonAll: string;
     buttonConfirm: string;
+    imprintText: string;
     imprintLink: string;
     hideDetails: string;
     showDetails: string;
@@ -12,18 +13,19 @@ export interface CookieNoticeSetting {
 }
 
 export class EnglishCookieSettings implements CookieNoticeSetting {
-    language: "EN";
-    heading: string = 'Cookie Consent';
+    language = 'EN'
+    heading = 'Cookie Consent'
 
-    notice: string = `We use cookies so that we can offer you the best possible website experience. This includes cookies which are necessary for the operation of the website, as well as other cookies which are used solely for anonymous statistical purposes, for our support chat or for marketing purposes. You are free to decide which categories you would like to permit. Please note that depending on the settings you choose, the full functionality of the website may no longer be available. Further information can be found in our <a href="/data-protection">Privacy Policy</a>.`
+    notice = `We use cookies so that we can offer you the best possible website experience. This includes cookies which are necessary for the operation of the website, as well as other cookies which are used solely for anonymous statistical purposes, for our support chat or for marketing purposes. You are free to decide which categories you would like to permit. Please note that depending on the settings you choose, the full functionality of the website may no longer be available. Further information can be found in our <a href="/data-protection">Privacy Policy</a>.`
 
-    buttonAll: string = 'Select All'
-    buttonConfirm: string = 'Confirm Selection'
+    buttonAll = 'Select All'
+    buttonConfirm = 'Confirm Selection'
 
-    imprintLink: string = '#'
+    imprintText = 'Imprint'
+    imprintLink = '#'
 
-    hideDetails: string = 'Hide Details'
-    showDetails: string = 'Show Details'
+    hideDetails = 'Hide Details'
+    showDetails = 'Show Details'
 
     categories: Array<Category> = [
         new Category(
@@ -50,18 +52,19 @@ export class EnglishCookieSettings implements CookieNoticeSetting {
 }
 
 export class GermanCookieSettings implements CookieNoticeSetting {
-    language: "DE";
-    heading: string = 'Cookie-Einstellungen';
+    language = "DE";
+    heading = 'Cookie-Einstellungen';
 
-    notice: string = `Wir verwenden Cookies, um Ihnen die bestmögliche Webseite anzubieten. Das bedeutet, dass wir Cookies nutzen, um die Seite funktionsfähig zu machen, als auch Cookies, die für eine anonyme statistische Erfassung, unseren Chat-Support und für Marketingzwecke notwendig sind. Ihnen steht es frei, zu entscheiden, welche Kategorien Sie zulassen möchten. Bitte seien Sie Sich bewusst, dass abhängig von Ihrer Auswahl eventuell nicth die volle Webseitenfunktionalität zur Verfügung steht. Weitere Informationen finden Sie in unserer <a target="_blank" href="/datenschutz">Datenschutzerlärung</a>.`
+    notice = `Wir verwenden Cookies, um Ihnen die bestmögliche Webseite anzubieten. Das bedeutet, dass wir Cookies nutzen, um die Seite funktionsfähig zu machen, als auch Cookies, die für eine anonyme statistische Erfassung, unseren Chat-Support und für Marketingzwecke notwendig sind. Ihnen steht es frei, zu entscheiden, welche Kategorien Sie zulassen möchten. Bitte seien Sie Sich bewusst, dass abhängig von Ihrer Auswahl eventuell nicth die volle Webseitenfunktionalität zur Verfügung steht. Weitere Informationen finden Sie in unserer <a target="_blank" href="/datenschutz">Datenschutzerlärung</a>.`
 
-    buttonAll: string = 'Alle auswählen'
-    buttonConfirm: string = 'Auswahl bestätigen'
+    buttonAll = 'Alle auswählen'
+    buttonConfirm = 'Auswahl bestätigen'
 
-    imprintLink: string = '#'
+    imprintText = "Impressum"
+    imprintLink = '#'
 
-    hideDetails: string = 'Details ausblenden'
-    showDetails: string = 'Details anzeigen'
+    hideDetails = 'Details ausblenden'
+    showDetails = 'Details anzeigen'
 
     categories: Array<Category> = [
         new Category(
