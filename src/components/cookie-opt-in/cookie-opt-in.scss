@@ -6,6 +6,18 @@ cookie-opt-in {
   }
 
   .sqr33-coi- {
+    &modal-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      min-height: 100%;
+      z-index: 99999;
+      background-color: #555555;
+      opacity: 0.8;
+    }
+
     &modal-content {
       display: flex;
       padding: 30px;
@@ -170,7 +182,7 @@ cookie-opt-in {
       position: fixed;
       top: 50px;
       left: 50%;
-      z-index: 9999999;
+      z-index: 999999;
       transform: translate(-50%);
       width: 100%;
       max-width: 900px;

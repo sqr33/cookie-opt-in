@@ -55,6 +55,7 @@ export class CookieOptIn {
   @Watch('language')
   switchLanguage() {
     this.settings = this.configMap[this.language];
+    this.hideModalIfIgnored();
   }
 
   deleteCookiesWithPrefix(prefix: string) {
@@ -159,23 +160,41 @@ export class CookieOptIn {
     this.modalVisible = false;
   }
 
+  hideModalIfIgnored() {
+    let isIgnored = false;
+    const path = window.location.pathname;
+    this.settings.disabledUrls.forEach((prefix) => {
+      if (path.indexOf(prefix) > -1) {
+        isIgnored = true;
+      }
+    }
+    );
+    if (isIgnored) {
+      this.modalVisible = false;
+    };
+  }
 
 
   componentWillLoad() {
     // console.log(JSON.stringify(new EnglishCookieSettings()));
     this.mergeConfig();
     this.switchLanguage();
+
     const wasConsented: string = Cookie.get('cookieOptInConsent');
     if (wasConsented && wasConsented === 'true') {
       this.wasConsented = true;
       this.modalVisible = false;
     }
 
+
+
+
   }
 
   componentDidLoad() {
     this.mergeConfig();
     this.switchLanguage();
+    this.hideModalIfIgnored();
     this.settings.categories.map((category) => {
       if (this.wasConsented) {
         const isAllowed = Cookie.get(`cookieOptInConsent-${category.id}`);
@@ -194,7 +213,8 @@ export class CookieOptIn {
 
   render() {
     return (
-      [<div id={`${this.stylePrefix}cookie-modal`} class={`${this.stylePrefix}cookie-modal ${this.modalVisible ? '' : 'hidden'}`}>
+      [<div class={`${this.stylePrefix}modal-background ${this.modalVisible ? '' : 'hidden'}`} ></div>,
+      <div id={`${this.stylePrefix}cookie-modal`} class={`${this.stylePrefix}cookie-modal ${this.modalVisible ? '' : 'hidden'}`}>
         <div class={`${this.stylePrefix}modal-content`}>
           <div class={`${this.stylePrefix}heading`}>
             {this.settings.heading}

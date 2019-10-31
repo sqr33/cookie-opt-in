@@ -10,6 +10,7 @@ export interface CookieNoticeSetting {
     showDetails: string;
     categories: Array<Category>;
     styles: StyleConfig;
+    disabledUrls: Array<string>;
 }
 
 export class EnglishCookieSettings implements CookieNoticeSetting {
@@ -22,7 +23,7 @@ export class EnglishCookieSettings implements CookieNoticeSetting {
     buttonConfirm = 'Confirm Selection'
 
     imprintText = 'Imprint'
-    imprintLink = '#'
+    imprintLink = '/imprint'
 
     hideDetails = 'Hide Details'
     showDetails = 'Show Details'
@@ -49,19 +50,20 @@ export class EnglishCookieSettings implements CookieNoticeSetting {
             'These cookies help us in measuring and optimising our marketing efforts.'),
     ];
     styles = new StyleConfig({});
+    disabledUrls = ['/imprint', '/data-protection'];
 }
 
 export class GermanCookieSettings implements CookieNoticeSetting {
     language = "DE";
     heading = 'Cookie-Einstellungen';
 
-    notice = `Wir verwenden Cookies, um Ihnen die bestmögliche Webseite anzubieten. Das bedeutet, dass wir Cookies nutzen, um die Seite funktionsfähig zu machen, als auch Cookies, die für eine anonyme statistische Erfassung, unseren Chat-Support und für Marketingzwecke notwendig sind. Ihnen steht es frei, zu entscheiden, welche Kategorien Sie zulassen möchten. Bitte seien Sie Sich bewusst, dass abhängig von Ihrer Auswahl eventuell nicth die volle Webseitenfunktionalität zur Verfügung steht. Weitere Informationen finden Sie in unserer <a target="_blank" href="/datenschutz">Datenschutzerlärung</a>.`
+    notice = `Wir verwenden Cookies, um Ihnen den Besuch unserer Webseite möglichst angenehm zu gestalten. Einige dieser Cookies sind notwendig, um die Seite überhaupt funktionsfähig zu machen. Andere Cookies sind nicht notwendig, aber ermöglichen zusätzliche Funktionen, wie z.B. anonyme statistische Auswertungen, unseren Chat-Support oder relevantere Werbung. Sie können selbst entscheiden, welche dieser zusätzlichen Cookie-Kategorien Sie zulassen möchten. Bitte seien Sie sich dabei bewusst, dass abhängig von Ihrer Auswahl eventuell nicht die volle Webseitenfunktionalität zur Verfügung steht. Weitere Informationen finden Sie in unserer <a target=\"_blank\" href=\"/datenschutz\">Datenschutzerklärung</a>.`
 
     buttonAll = 'Alle auswählen'
     buttonConfirm = 'Auswahl bestätigen'
 
     imprintText = "Impressum"
-    imprintLink = '#'
+    imprintLink = '/impresum'
 
     hideDetails = 'Details ausblenden'
     showDetails = 'Details anzeigen'
@@ -88,6 +90,7 @@ export class GermanCookieSettings implements CookieNoticeSetting {
             'Diese Cookies helfen uns dabei, unser Marketing zu messen und zu verbessern.'),
     ];
     styles = new StyleConfig({});
+    disabledUrls = ['/impressum', '/datenschutz'];
 
 }
 

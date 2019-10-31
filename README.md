@@ -113,10 +113,10 @@ Here is the full configuration. You can overwrite any part of it.
 ```
 {
     "heading": "Cookie-Einstellungen",
-    "notice": "Wir verwenden Cookies, um Ihnen die bestmögliche Webseite anzubieten. Das bedeutet, dass wir Cookies nutzen, um die Seite funktionsfähig zu machen, als auch Cookies, die für eine anonyme statistische Erfassung, unseren Chat-Support und für Marketingzwecke notwendig sind. Ihnen steht es frei, zu entscheiden, welche Kategorien Sie zulassen möchten. Bitte seien Sie Sich bewusst, dass abhängig von Ihrer Auswahl eventuell nicth die volle Webseitenfunktionalität zur Verfügung steht. Weitere Informationen finden Sie in unserer <a target=\"_blank\" href=\"/datenschutz\">Datenschutzerlärung</a>.",
+    "notice": "Wir verwenden Cookies, um Ihnen den Besuch unserer Webseite möglichst angenehm zu gestalten. Einige dieser Cookies sind notwendig, um die Seite überhaupt funktionsfähig zu machen. Andere Cookies sind nicht notwendig, aber ermöglichen zusätzliche Funktionen, wie z.B. anonyme statistische Auswertungen, unseren Chat-Support oder relevantere Werbung. Sie können selbst entscheiden, welche dieser zusätzlichen Cookie-Kategorien Sie zulassen möchten. Bitte seien Sie sich dabei bewusst, dass abhängig von Ihrer Auswahl eventuell nicht die volle Webseitenfunktionalität zur Verfügung steht. Weitere Informationen finden Sie in unserer <a target=\"_blank\" href=\"/datenschutz\">Datenschutzerklärung</a>.",
     "buttonAll": "Alle auswählen",
     "buttonConfirm": "Auswahl bestätigen",
-    "imprintLink": "#",
+    "imprintLink": "/impressum",
     "hideDetails": "Details ausblenden",
     "showDetails": "Details anzeigen",
     "categories": [
@@ -153,7 +153,11 @@ Here is the full configuration. You can overwrite any part of it.
     ],
     "styles": {
         "confirmAllButton": {}
-    }
+    },
+    "disabledUrls": [
+        "/impressum",
+        "/datenschutz"
+    ]
 }
 ```
 
@@ -201,7 +205,11 @@ Here is the full configuration. You can overwrite any part of it.
     ],
     "styles": {
         "confirmAllButton": {}
-    }
+    },
+    "disabledUrls": [
+        "/imprint",
+        "/data-protection"
+    ]
 }
     
 ```
