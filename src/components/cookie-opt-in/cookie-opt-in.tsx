@@ -1,4 +1,4 @@
-import { Component, h, State, Method, Prop, Watch } from '@stencil/core';
+import { Component, Event, EventEmitter, h, State, Method, Prop, Watch } from '@stencil/core';
 import { CookieNoticeSetting, EnglishCookieSettings, GermanCookieSettings } from './settings'
 import Cookie from 'js-cookie';
 
@@ -7,8 +7,18 @@ import Cookie from 'js-cookie';
   styleUrl: 'cookie-opt-in.scss'
 })
 export class CookieOptIn {
+
   private defaultLanguage = 'EN';
   private stylePrefix = 'sqr33-coi-';
+
+  @Event({
+    /*
+     * A string custom event name to override the default
+     */
+    eventName: `consentGiven`
+  }) settingsChoiceEmitter: EventEmitter;
+
+
 
   // Not defining a type b/c in HTML you can only pass
   // in strings if you add it as an argument in the tag. 
@@ -141,7 +151,6 @@ export class CookieOptIn {
       }
 
       if (previousState === true && !this.checkIfTicked(checkboxId)) {
-        console.log(`Running Opt Out Scripts for ${checkboxId}`);
         const cookiesToDelete = this.cookiesToDelete[checkboxId];
         console.log(cookiesToDelete);
         cookiesToDelete.forEach(cookiePrefix => {
@@ -176,7 +185,6 @@ export class CookieOptIn {
 
 
   componentWillLoad() {
-    // console.log(JSON.stringify(new EnglishCookieSettings()));
     this.mergeConfig();
     this.switchLanguage();
 
@@ -197,9 +205,11 @@ export class CookieOptIn {
     this.hideModalIfIgnored();
     this.settings.categories.map((category) => {
       if (this.wasConsented) {
-        const isAllowed = Cookie.get(`cookieOptInConsent-${category.id}`);
+        const cookieName = `cookieOptInConsent-${category.id}`
+        const isAllowed = Cookie.get(cookieName);
         if (isAllowed && isAllowed === 'true') {
           this.setToTicked(category.id);
+          this.settingsChoiceEmitter.emit(`${cookieName} executed on load`);
         }
       }
       this.checkboxStatus[category.id] = false;
@@ -259,8 +269,10 @@ export class CookieOptIn {
             <a target="_blank" href={this.settings.imprintLink}>{this.settings.imprintText}</a>
           </div>
           <div class={`${this.stylePrefix}buttons`}>
-            <button class={`${this.stylePrefix}btn-all`} style={this.settings.styles.confirmAllButton} onClick={() => this.checkWhatToExecute(true)}>{this.settings.buttonAll}</button>
-            <button class={`${this.stylePrefix}btn-confirm`} onClick={() => this.checkWhatToExecute(false)}>{this.settings.buttonConfirm}</button>
+            <button class={`${this.stylePrefix}btn-all`} style={this.settings.styles.confirmAllButton} onClick={() => {
+              this.checkWhatToExecute(true); this.settingsChoiceEmitter.emit('button checked all was clicked');
+            }}>{this.settings.buttonAll}</button>
+            <button class={`${this.stylePrefix}btn-confirm`} onClick={() => { this.checkWhatToExecute(false); this.settingsChoiceEmitter.emit('Comfirm chosen settings clicked') }}>{this.settings.buttonConfirm}</button>
           </div>
 
         </div>

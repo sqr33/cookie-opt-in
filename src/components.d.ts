@@ -34,6 +34,7 @@ declare namespace LocalJSX {
   interface CookieOptIn {
     'configs'?: any;
     'language'?: string;
+    'onConsentGiven'?: (event: CustomEvent<any>) => void;
   }
 
   interface IntrinsicElements {
